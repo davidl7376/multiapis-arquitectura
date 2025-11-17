@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "nombre": "Carlos Pérez",
+    "tipo": "personal",
+    "rol": "Bodeguero",
+    "estado": "disponible",
+    "asignadoA": "Ninguno"
+  },
+  {
+    "id": 2,
+    "nombre": "Montacargas Toyota 3T",
+    "tipo": "equipo",
+    "estado": "mantenimiento",
+    "asignadoA": "Área de carga"
+  }
+]

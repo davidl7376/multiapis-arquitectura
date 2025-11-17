@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "nombre": "Contrato de Suministro",
+    "tipo": "contrato",
+    "proyecto": "Mejora de Inventario 2025",
+    "fecha": "2025-01-10",
+    "version": "1.0",
+    "estado": "aprobado",
+    "creadoPor": "Admin"
+  },
+  {
+    "id": 2,
+    "nombre": "Acta de Revisión",
+    "tipo": "acta",
+    "proyecto": "Sistema de Bodega",
+    "fecha": "2025-02-01",
+    "version": "1.2",
+    "estado": "pendiente",
+    "creadoPor": "Supervisor"
+  }
+]

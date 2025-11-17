@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  gestion-documental-api:
+    build: ./gestion-documental-api
+    container_name: gestion-documental-api
+    environment:
+      - PORT=4001
+      - SERVICE_NAME=gestion-documental-api
+      - PROYECTOS_API_URL=http://proyectos-api:4003
+      - DATABASE_URL=${DATABASE_URL}  # <--- agregamos la DB
+
+    ports:
+      - "4001:4001"
+    restart: unless-stopped
+
+  recursos-api:
+    build: ./recursos-api
+    container_name: recursos-api
+    environment:
+      - PORT=4002
+      - SERVICE_NAME=recursos-api
+      - GESTION_API_URL=http://gestion-documental-api:4001
+      - DATABASE_URL=${DATABASE_URL}  # <--- agregamos la DB
+    ports:
+      - "4002:4002"
+    depends_on:
+      - gestion-documental-api
+    restart: unless-stopped
+
+  proyectos-api:
+    build: ./proyectos-api
+    container_name: proyectos-api
+    environment:
+      - PORT=4003
+      - SERVICE_NAME=proyectos-api
+      - GESTION_API_URL=http://gestion-documental-api:4001
+      - RECURSOS_API_URL=http://recursos-api:4002
+      - DATABASE_URL=${DATABASE_URL}  # <--- agregamos la DB
+    ports:
+      - "4003:4003"
+    depends_on:
+      - gestion-documental-api
+      - recursos-api
+    restart: unless-stopped

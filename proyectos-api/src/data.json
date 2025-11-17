@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "nombre": "Implementación de Sección de Papelería",
+    "codigo": "PRJ-001",
+    "tipo": "comercial",
+    "fechaInicio": "2025-01-15",
+    "fechaFin": "2025-03-30",
+    "responsable": "Laura Gómez",
+    "avance": "40%",
+    "hitos": [
+      "Compra de estanterías",
+      "Inventario inicial"
+    ]
+  },
+  {
+    "id": 2,
+    "nombre": "Optimización de Inventario",
+    "codigo": "PRJ-002",
+    "tipo": "logística",
+    "fechaInicio": "2025-02-01",
+    "fechaFin": "2025-04-10",
+    "responsable": "Miguel Torres",
+    "avance": "20%",
+    "hitos": [
+      "Auditoría inicial"
+    ]
+  }
+]
