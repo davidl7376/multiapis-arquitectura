@@ -1,4 +1,4 @@
-name: Build and Push APIs
+name: Build and Push Docker Images
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -16,19 +16,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Log in to Azure Container Registry
-        uses: azure/docker-login@v1
+      - name: Log in to Docker registry
+        uses: docker/login-action@v2
         with:
-          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
         run: |
           echo "Building Docker image for ${{ matrix.api }}"
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.api }}:latest ./${{ matrix.api }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.api }}:latest ./${{ matrix.api }}
 
       - name: Push Docker image
         run: |
           echo "Pushing Docker image for ${{ matrix.api }}"
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.api }}:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ matrix.api }}:latest
