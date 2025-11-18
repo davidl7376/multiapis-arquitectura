@@ -35,6 +35,16 @@ jobs:
       - name: 📥 Checkout
         uses: actions/checkout@v4
 
+      - name: 🔧 Debug Secrets
+        run: |
+          echo "ACR_LOGIN_SERVER length: ${#ACR_LOGIN_SERVER}"
+          echo "ACR_USERNAME length: ${#ACR_USERNAME}"
+          echo "ACR_PASSWORD length: ${#ACR_PASSWORD}"
+        env:
+          ACR_LOGIN_SERVER: ${{ secrets.ACR_LOGIN_SERVER }}
+          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+
       - name: 🔐 Azure Login (Service Principal)
         uses: azure/login@v2
         with:
@@ -51,19 +61,30 @@ jobs:
         id: vars
         run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
-      - name: 🔧 Debug ACR Login Server
-        run: |
-          echo "ACR Login Server: ${{ secrets.ACR_LOGIN_SERVER }}"
-          echo "ACR Username: ${{ secrets.ACR_USERNAME }}"
-          echo "Image name: ${{ matrix.image }}"
-
       - name: 🏗️ Build & Push ${{ matrix.service }}
-        uses: docker/build-push-action@v5
-        with:
-          context: ${{ matrix.context }}
-          file: ${{ matrix.dockerfile }}
-          push: true
-          tags: |
-            ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:latest
-            ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:${{ steps.vars.outputs.TAG }}
-          # Eliminamos la caché por ahora para simplificar
+        run: |
+          # Verificar que ACR_LOGIN_SERVER tiene valor
+          if [ -z "${{ secrets.ACR_LOGIN_SERVER }}" ]; then
+            echo "ERROR: ACR_LOGIN_SERVER está vacío"
+            exit 1
+          fi
+          
+          FULL_IMAGE_NAME="${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}"
+          echo "Building image: $FULL_IMAGE_NAME"
+          
+          # Construir la imagen
+          docker build \
+            -t $FULL_IMAGE_NAME:latest \
+            -f ${{ matrix.dockerfile }} \
+            ${{ matrix.context }}
+          
+          # Tag con SHA
+          docker tag \
+            $FULL_IMAGE_NAME:latest \
+            $FULL_IMAGE_NAME:${{ steps.vars.outputs.TAG }}
+          
+          # Push ambas tags
+          docker push $FULL_IMAGE_NAME:latest
+          docker push $FULL_IMAGE_NAME:${{ steps.vars.outputs.TAG }}
+          
+          echo "✅ Build and push completed for ${{ matrix.service }}"
