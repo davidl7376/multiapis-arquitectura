@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS gestion_schema.documents (
 -- Recursos
 CREATE SCHEMA IF NOT EXISTS recursos_schema;
 
-
 CREATE TABLE IF NOT EXISTS recursos_schema.recursos (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
