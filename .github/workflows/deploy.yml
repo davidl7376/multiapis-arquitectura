@@ -54,15 +54,15 @@ jobs:
         id: vars
         run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
+     
       - name: 🏗️ Build & Push ${{ matrix.service }}
         run: |
           echo "Building Docker image for ${{ matrix.service }}"
-          docker buildx build \
+          # Usar Docker tradicional en lugar de buildx
+          docker build \
             --tag ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:latest \
             --file ${{ matrix.dockerfile }} \
-            ${{ matrix.context }} \
-            --load \
-            --progress=plain
+            ${{ matrix.context }}
           
           echo "Tagging image with SHA"
           docker tag \
