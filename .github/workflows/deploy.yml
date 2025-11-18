@@ -1,56 +1,34 @@
-name: Build & Push all APIs to ACR (monorepo)
+name: Build and Push APIs
 
 on:
   push:
-    branches: [ "main" ]
-    paths:
-      - "gestion-documental-api/**"
-      - "proyectos-api/**"
-      - "recursos-api/**"
-      - ".github/workflows/deploy.yml"
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
     strategy:
-      fail-fast: false
       matrix:
-        include:
-          - service: gestion-documental-api
-            context: gestion-documental-api
-            image: gestion-documental-api
-          - service: proyectos-api
-            context: proyectos-api
-            image: proyectos-api
-          - service: recursos-api
-            context: recursos-api
-            image: recursos-api
+        api: [gestion-documental-api, proyectos-api, recursos-api]
 
     steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: 🔐 Azure Login (Service Principal)
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: 🔑 Login to ACR
+      - name: Log in to Azure Container Registry
         uses: azure/docker-login@v1
         with:
           login-server: ${{ secrets.ACR_LOGIN_SERVER }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: 🏷️ Set version tag (short sha)
-        id: vars
-        run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
-
-      - name: 🏗️ Build & Push ${{ matrix.service }}
+      - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:latest ${{ matrix.context }}
-          docker tag ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:latest ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:${{ steps.vars.outputs.TAG }}
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:latest
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:${{ steps.vars.outputs.TAG }}
+          echo "Building Docker image for ${{ matrix.api }}"
+          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.api }}:latest ./${{ matrix.api }}
+
+      - name: Push Docker image
+        run: |
+          echo "Pushing Docker image for ${{ matrix.api }}"
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.api }}:latest
