@@ -56,21 +56,13 @@ jobs:
 
      
       - name: 🏗️ Build & Push ${{ matrix.service }}
-        run: |
-          echo "Building Docker image for ${{ matrix.service }}"
-          # Usar Docker tradicional en lugar de buildx
-          docker build \
-            --tag ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:latest \
-            --file ${{ matrix.dockerfile }} \
-            ${{ matrix.context }}
-          
-          echo "Tagging image with SHA"
-          docker tag \
-            ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:latest \
-            ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:${{ steps.vars.outputs.TAG }}
-          
-          echo "Pushing images to ACR"
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:latest
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:${{ steps.vars.outputs.TAG }}
-          
-          echo "Build and push completed for ${{ matrix.service }}"
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: |
+            ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:latest
+            ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:${{ github.sha }}
+          cache-from: type=registry,ref=${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:buildcache
+          cache-to: type=registry,ref=${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:buildcache,mode=max
