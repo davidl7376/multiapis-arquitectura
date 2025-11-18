@@ -54,10 +54,11 @@ jobs:
       - name: 🏗️ Build & Push ${{ matrix.service }}
         run: |
           echo "Building Docker image for ${{ matrix.service }}"
-          docker build \
+          docker buildx build \
             -t ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:latest \
             -f ${{ matrix.dockerfile }} \
-            ${{ matrix.context }}
+            ${{ matrix.context }} \
+            --load
           
           echo "Tagging image with SHA"
           docker tag \
