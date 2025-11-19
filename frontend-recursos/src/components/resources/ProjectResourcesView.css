@@ -1,0 +1,173 @@
+.project-resources-view {
+  background: white;
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border: 1px solid #e1e8ed;
+}
+
+.project-resources-view h3 {
+  margin: 0 0 20px 0;
+  color: #2c3e50;
+  font-size: 18px;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+.project-selector {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.project-selector label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+.project-selector select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 200px;
+}
+
+.project-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.project-stat-card {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 6px;
+  text-align: center;
+  border-left: 4px solid #3498db;
+}
+
+.project-stat-card h4 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+.stat-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #7f8c8d;
+}
+
+.project-detail {
+  border-top: 1px solid #ecf0f1;
+  padding-top: 20px;
+}
+
+.project-detail h4 {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+}
+
+.resources-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.resource-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #27ae60;
+}
+
+.resource-info {
+  flex: 2;
+}
+
+.resource-info strong {
+  display: block;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.resource-info span {
+  display: block;
+  color: #7f8c8d;
+  font-size: 13px;
+}
+
+.especializacion {
+  font-style: italic;
+}
+
+.resource-contact {
+  flex: 2;
+  font-size: 13px;
+  color: #7f8c8d;
+}
+
+.resource-status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-A {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.status-D {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.status-M {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.status-V {
+  background: #fce4ec;
+  color: #c2185b;
+}
+
+.no-resources {
+  text-align: center;
+  color: #7f8c8d;
+  font-style: italic;
+  padding: 30px;
+}
+
+@media (max-width: 768px) {
+  .project-selector {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .resource-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  .project-stats {
+    grid-template-columns: 1fr;
+  }
+}

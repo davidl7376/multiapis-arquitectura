@@ -1,0 +1,37 @@
+.resources-page {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.resources-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.resources-header h1 {
+  color: #2c3e50;
+  margin: 0 0 8px 0;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.resources-subtitle {
+  color: #7f8c8d;
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .resources-page {
+    padding: 15px;
+  }
+  
+  .resources-header h1 {
+    font-size: 28px;
+  }
+}
