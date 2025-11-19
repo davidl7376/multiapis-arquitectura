@@ -1,5 +1,5 @@
 // frontend-recursos/src/services/recursosService.js
-const RECURSOS_API = "https://recursos-api-cloud.azurewebsites.net";
+const RECURSOS_API = "https://recursos-api-cloud-gtaqgsf2hbfvgac5.australiaeast-01.azurewebsites.net";
 const PROYECTOS_API = "https://proyectos-api-cloud.azurewebsites.net";
 
 export const recursosService = {
