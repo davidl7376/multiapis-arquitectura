@@ -1,6 +1,30 @@
+import { useState, useEffect } from "react";
+import { recursosService } from "../../services/recursosService";
 import "./ResourcesTable.css";
 
-export default function ResourcesTable({ resources = [] }) {
+export default function ResourcesTable() {
+  const [resources, setResources] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const loadPersonal = async () => {
+    try {
+      setLoading(true);
+      const personalData = await recursosService.getPersonal();
+      setResources(personalData);
+      setError(null);
+    } catch (err) {
+      setError("Error cargando el personal");
+      console.error("Error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadPersonal();
+  }, []);
+
   const getEstadoBadge = (estado) => {
     const badges = {
       'Asignado': 'A',
@@ -11,9 +35,32 @@ export default function ResourcesTable({ resources = [] }) {
     return badges[estado] || estado;
   };
 
+  if (loading) {
+    return (
+      <div className="resources-table-card">
+        <h3>Recursos de Personal</h3>
+        <div className="loading">Cargando personal...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="resources-table-card">
+        <h3>Recursos de Personal</h3>
+        <div className="error">
+          {error}
+          <button onClick={loadPersonal} className="retry-btn">
+            Reintentar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="resources-table-card">
-      <h3>Recursos de Personal</h3>
+      <h3>Recursos de Personal ({resources.length})</h3>
 
       <table className="resources-table">
         <thead>
@@ -29,7 +76,7 @@ export default function ResourcesTable({ resources = [] }) {
         <tbody>
           {resources.length > 0 ? resources.map((resource, index) => (
             <tr key={resource.id || resource._id || index}>
-              <td className="nombre-cell">{resource.nombreCompleto}</td>
+              <td className="nombre-cell">{resource.nombreCompleto || resource.nombre}</td>
               <td>{resource.rol}</td>
               <td>{resource.especializacion}</td>
               <td>
@@ -37,7 +84,7 @@ export default function ResourcesTable({ resources = [] }) {
                   ({getEstadoBadge(resource.estado)}) {resource.estado}
                 </span>
               </td>
-              <td>{resource.proyectoAsignado}</td>
+              <td>{resource.proyectoAsignado || "Sin asignar"}</td>
               <td className="contacto-cell">
                 <div>{resource.email}</div>
                 <div className="telefono">{resource.telefono}</div>

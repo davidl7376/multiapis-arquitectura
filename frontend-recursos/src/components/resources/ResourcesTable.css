@@ -87,6 +87,37 @@
   padding: 40px !important;
 }
 
+/* 🆕 ESTILOS LOADING/ERROR - FUERA DEL MEDIA QUERY */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #d32f2f;
+  background: #ffebee;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.retry-btn {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.retry-btn:hover {
+  background: #b71c1c;
+}
+
 @media (max-width: 768px) {
   .resources-table {
     display: block;
