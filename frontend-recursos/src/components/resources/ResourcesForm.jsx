@@ -1,18 +1,20 @@
 import React, { useState } from "react";
+import { recursosService } from "../../services/recursosService";
 import "./ResourcesForm.css";
 
 export default function ResourceForm({ onSuccess }) {
-  const API_BASE = "http://localhost:4000/api/personal";
-
   const [form, setForm] = useState({
-    nombreCompleto: "",
-    rol: "",
+    name: "",                    // 🆕 Cambiado de nombreCompleto
+    type: "",                    // 🆕 Cambiado de rol
     especializacion: "",
     email: "",
     telefono: "",
-    estado: "",
-    proyectoAsignado: "Sin asignación"
+    estado: "Disponible",        // 🆕 Valor por defecto
+    project: "Sin asignación"    // 🆕 Cambiado de proyectoAsignado
   });
+
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,32 +24,39 @@ export default function ResourceForm({ onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!form.nombreCompleto || !form.rol || !form.email) {
+    if (!form.name || !form.type || !form.email) {
       alert("Por favor completa los campos obligatorios");
       return;
     }
 
-    try {
-      const res = await fetch(API_BASE, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
-      });
+    setLoading(true);
+    setMessage("");
 
-      if (res.ok) {
-        setForm({
-          nombreCompleto: "",
-          rol: "",
-          especializacion: "",
-          email: "",
-          telefono: "",
-          estado: "",
-          proyectoAsignado: "Sin asignación"
-        });
-        onSuccess();
-      }
+    try {
+      // 🆕 Usar el servicio real en lugar de fetch directo
+      await recursosService.crearPersonal(form);
+      
+      // Limpiar formulario
+      setForm({
+        name: "",
+        type: "",
+        especializacion: "",
+        email: "",
+        telefono: "",
+        estado: "Disponible",
+        project: "Sin asignación"
+      });
+      
+      setMessage("✅ Personal registrado exitosamente");
+      
+      // 🆕 Notificar al componente padre para actualizar la tabla
+      if (onSuccess) onSuccess();
+      
     } catch (error) {
       console.error("Error al registrar personal:", error);
+      setMessage("❌ Error al registrar personal");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,14 +65,20 @@ export default function ResourceForm({ onSuccess }) {
       <h3>Registrar Nuevo Personal</h3>
       <p className="form-description">Complete la información del personal para agregarlo al sistema</p>
       
+      {message && (
+        <div className={`form-message ${message.includes('✅') ? 'success' : 'error'}`}>
+          {message}
+        </div>
+      )}
+      
       <form className="resource-form-body" onSubmit={handleSubmit}>
         <div className="form-row two-cols">
           <div className="form-group">
             <label>Nombre Completo *</label>
             <input
-              name="nombreCompleto"
+              name="name"  // 🆕 Cambiado
               placeholder="Ej: Juan Pérez García"
-              value={form.nombreCompleto}
+              value={form.name}
               onChange={handleChange}
               required
             />
@@ -71,7 +86,7 @@ export default function ResourceForm({ onSuccess }) {
 
           <div className="form-group">
             <label>Rol *</label>
-            <select name="rol" value={form.rol} onChange={handleChange} required>
+            <select name="type" value={form.type} onChange={handleChange} required>  {/* 🆕 Cambiado */}
               <option value="">Seleccionar rol</option>
               <option>Ingeniero Civil</option>
               <option>Técnico Eléctrico</option>
@@ -122,9 +137,8 @@ export default function ResourceForm({ onSuccess }) {
           <div className="form-group">
             <label>Estado</label>
             <select name="estado" value={form.estado} onChange={handleChange}>
-              <option value="">Seleccionar estado</option>
+              <option value="Disponible">Disponible</option>  {/* 🆕 Valor por defecto */}
               <option>Asignado</option>
-              <option>Disponible</option>
               <option>En Mantenimiento</option>
               <option>Vacaciones</option>
             </select>
@@ -132,7 +146,7 @@ export default function ResourceForm({ onSuccess }) {
 
           <div className="form-group">
             <label>Proyecto Asignado</label>
-            <select name="proyectoAsignado" value={form.proyectoAsignado} onChange={handleChange}>
+            <select name="project" value={form.project} onChange={handleChange}>  {/* 🆕 Cambiado */}
               <option>Sin asignación</option>
               <option>Proyecto Alpha</option>
               <option>Proyecto Beta</option>
@@ -143,8 +157,12 @@ export default function ResourceForm({ onSuccess }) {
         </div>
 
         <div className="form-actions">
-          <button type="submit" className="btn-primary">
-            Registrar Personal
+          <button 
+            type="submit" 
+            className="btn-primary"
+            disabled={loading}
+          >
+            {loading ? "Registrando..." : "Registrar Personal"}
           </button>
         </div>
       </form>

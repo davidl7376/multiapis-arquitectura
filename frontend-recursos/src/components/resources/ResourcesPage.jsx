@@ -3,21 +3,25 @@ import ResourcesDashboard from "./ResourcesDashboard";
 import ResourcesFilters from "./ResourcesFilters";
 import ResourcesTable from "./ResourcesTable";
 import ResourcesForm from "./ResourcesForm";
-import ProjectAssignment from "./ProjectAssignment"; // ← Nuevo
-import ProjectResourcesView from "./ProjectResourcesView"; // ← Nuevo
+import ProjectAssignment from "./ProjectAssignment";
+import ProjectResourcesView from "./ProjectResourcesView";
+import { recursosService } from "../../services/recursosService"; // ✅ Servicio real
 import "./ResourcesPage.css";
 
 export default function ResourcesPage() {
-  const API_BASE = "http://localhost:4000/api/personal";
   const [resources, setResources] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchResources = async () => {
     try {
-      const res = await fetch(API_BASE);
-      const data = await res.json();
+      setLoading(true);
+      // ✅ USAR SERVICIO REAL - NO MÁS API_BASE LOCAL
+      const data = await recursosService.getPersonal();
       setResources(data);
     } catch (err) {
-      console.error(err);
+      console.error("Error cargando recursos:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,9 +38,9 @@ export default function ResourcesPage() {
         </p>
       </div>
 
+      {/* ✅ FORMULARIO CONECTADO A API REAL */}
       <ResourcesForm onSuccess={fetchResources} />
       
-      {/* NUEVOS COMPONENTES DE ASIGNACIÓN */}
       <ProjectAssignment resources={resources} onAssignmentUpdate={fetchResources} />
       <ProjectResourcesView resources={resources} />
       
