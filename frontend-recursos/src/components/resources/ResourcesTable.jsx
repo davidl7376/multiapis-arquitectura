@@ -76,16 +76,16 @@ export default function ResourcesTable() {
         <tbody>
           {resources.length > 0 ? resources.map((resource, index) => (
             <tr key={resource.id || resource._id || index}>
-              {/* 🆕 CAMBIA SOLO ESTAS LÍNEAS */}
-              <td className="nombre-cell">{resource.name}</td>
-              <td>{resource.type}</td>
+              {/* ✅ CAMPOS CORREGIDOS */}
+              <td className="nombre-cell">{resource.nombre_completo}</td>
+              <td>{resource.rol}</td>
               <td>{resource.especializacion || "N/A"}</td>
               <td>
                 <span className={`estado-badge estado-${getEstadoBadge(resource.estado)}`}>
                   ({getEstadoBadge(resource.estado)}) {resource.estado || "Disponible"}
                 </span>
               </td>
-              <td>{resource.project || "Sin asignar"}</td>
+              <td>{resource.proyecto_asignado || "Sin asignar"}</td>
               <td className="contacto-cell">
                 <div>{resource.email || "N/A"}</div>
                 <div className="telefono">{resource.telefono || "N/A"}</div>
