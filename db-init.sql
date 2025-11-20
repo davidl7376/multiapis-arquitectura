@@ -34,3 +34,5 @@ CREATE TABLE IF NOT EXISTS proyectos_schema.proyectos (
     FOREIGN KEY (document_id) REFERENCES gestion_schema.documents(id),
     FOREIGN KEY (recurso_id) REFERENCES recursos_schema.recursos(id)
 );
+
+
