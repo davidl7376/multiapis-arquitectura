@@ -17,6 +17,6 @@ export const proyectosService = {
     fetch(`${RECURSOS_API}/recursos/${personalId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ project: proyectoId })
+      body: JSON.stringify({ proyecto_asignado: proyectoId })  // ✅ CORREGIDO
     })
 };

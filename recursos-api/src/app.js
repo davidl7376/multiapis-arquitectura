@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
 import { pool } from "./db.js";
-import recursos from "./data.json" assert { type: "json" }; // si quieres mantener datos de ejemplo
-
 
 const app = express();
 app.use(cors());
@@ -23,7 +21,6 @@ app.get("/db/health", async (_req, res) => {
     res.status(500).json({ ok: false, error: String(e) });
   }
 });
-
 
 // GET todos los recursos
 app.get("/recursos", async (_req, res) => {
@@ -47,34 +44,71 @@ app.get("/recursos/:id", async (req, res) => {
   }
 });
 
-// POST crear recurso
+// POST crear recurso - VERSIÓN CORREGIDA
 app.post("/recursos", async (req, res) => {
-  const { name, type, project } = req.body;
-  if (!name || !type || !project) return res.status(400).json({ error: "name, type & project required" });
+  const { 
+    nombre_completo, 
+    rol, 
+    especializacion, 
+    email, 
+    telefono, 
+    estado, 
+    proyecto_asignado 
+  } = req.body;
+
+  // Validación de campos requeridos
+  if (!nombre_completo || !rol || !email) {
+    return res.status(400).json({ 
+      error: "nombre_completo, rol y email son requeridos" 
+    });
+  }
 
   try {
     const r = await pool.query(
-      "INSERT INTO recursos_schema.recursos(name, type, project) VALUES($1,$2,$3) RETURNING *",
-      [name, type, project]
+      `INSERT INTO recursos_schema.recursos 
+       (nombre_completo, rol, especializacion, email, telefono, estado, proyecto_asignado) 
+       VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+      [nombre_completo, rol, especializacion, email, telefono, estado, proyecto_asignado]
     );
+    
+    console.log('✅ Recurso creado:', r.rows[0]);
     res.status(201).json(r.rows[0]);
+    
   } catch (e) {
-    res.status(500).json({ error: "insert failed", detail: String(e) });
+    console.error('❌ Error creando recurso:', e);
+    res.status(500).json({ 
+      error: "insert failed", 
+      detail: String(e) 
+    });
   }
 });
 
-// PUT actualizar recurso
+// PUT actualizar recurso - VERSIÓN CORREGIDA
 app.put("/recursos/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, type, project } = req.body;
+  const { 
+    nombre_completo, rol, especializacion, email, 
+    telefono, estado, proyecto_asignado 
+  } = req.body;
+  
   try {
     const r = await pool.query(
       `UPDATE recursos_schema.recursos
-       SET name=COALESCE($1,name), type=COALESCE($2,type), project=COALESCE($3,project)
-       WHERE id=$4 RETURNING *`,
-      [name, type, project, id]
+       SET nombre_completo=COALESCE($1, nombre_completo),
+           rol=COALESCE($2, rol),
+           especializacion=COALESCE($3, especializacion),
+           email=COALESCE($4, email),
+           telefono=COALESCE($5, telefono),
+           estado=COALESCE($6, estado),
+           proyecto_asignado=COALESCE($7, proyecto_asignado)
+       WHERE id=$8 RETURNING *`,
+      [nombre_completo, rol, especializacion, email, telefono, estado, proyecto_asignado, id]
     );
-    if (r.rows.length === 0) return res.status(404).json({ error: "Recurso no encontrado" });
+    
+    if (r.rows.length === 0) {
+      return res.status(404).json({ error: "Recurso no encontrado" });
+    }
+    
     res.json(r.rows[0]);
   } catch (e) {
     res.status(500).json({ error: "update failed", detail: String(e) });

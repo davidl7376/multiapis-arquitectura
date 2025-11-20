@@ -4,13 +4,13 @@ import "./ResourcesForm.css";
 
 export default function ResourceForm({ onSuccess }) {
   const [form, setForm] = useState({
-    name: "",                    // 🆕 Cambiado de nombreCompleto
-    type: "",                    // 🆕 Cambiado de rol
+    nombre_completo: "",          // ✅ CORREGIDO
+    rol: "",                      // ✅ CORREGIDO  
     especializacion: "",
     email: "",
     telefono: "",
-    estado: "Disponible",        // 🆕 Valor por defecto
-    project: "Sin asignación"    // 🆕 Cambiado de proyectoAsignado
+    estado: "Disponible",
+    proyecto_asignado: "Sin asignación"  // ✅ CORREGIDO
   });
 
   const [loading, setLoading] = useState(false);
@@ -24,7 +24,7 @@ export default function ResourceForm({ onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!form.name || !form.type || !form.email) {
+    if (!form.nombre_completo || !form.rol || !form.email) {  // ✅ CORREGIDO
       alert("Por favor completa los campos obligatorios");
       return;
     }
@@ -33,23 +33,21 @@ export default function ResourceForm({ onSuccess }) {
     setMessage("");
 
     try {
-      // 🆕 Usar el servicio real en lugar de fetch directo
       await recursosService.crearPersonal(form);
       
       // Limpiar formulario
       setForm({
-        name: "",
-        type: "",
+        nombre_completo: "",      // ✅ CORREGIDO
+        rol: "",                  // ✅ CORREGIDO
         especializacion: "",
         email: "",
         telefono: "",
         estado: "Disponible",
-        project: "Sin asignación"
+        proyecto_asignado: "Sin asignación"  // ✅ CORREGIDO
       });
       
       setMessage("✅ Personal registrado exitosamente");
       
-      // 🆕 Notificar al componente padre para actualizar la tabla
       if (onSuccess) onSuccess();
       
     } catch (error) {
@@ -76,9 +74,9 @@ export default function ResourceForm({ onSuccess }) {
           <div className="form-group">
             <label>Nombre Completo *</label>
             <input
-              name="name"  // 🆕 Cambiado
+              name="nombre_completo"    // ✅ CORREGIDO
               placeholder="Ej: Juan Pérez García"
-              value={form.name}
+              value={form.nombre_completo}
               onChange={handleChange}
               required
             />
@@ -86,7 +84,7 @@ export default function ResourceForm({ onSuccess }) {
 
           <div className="form-group">
             <label>Rol *</label>
-            <select name="type" value={form.type} onChange={handleChange} required>  {/* 🆕 Cambiado */}
+            <select name="rol" value={form.rol} onChange={handleChange} required>  {/* ✅ CORREGIDO */}
               <option value="">Seleccionar rol</option>
               <option>Ingeniero Civil</option>
               <option>Técnico Eléctrico</option>
@@ -137,7 +135,7 @@ export default function ResourceForm({ onSuccess }) {
           <div className="form-group">
             <label>Estado</label>
             <select name="estado" value={form.estado} onChange={handleChange}>
-              <option value="Disponible">Disponible</option>  {/* 🆕 Valor por defecto */}
+              <option value="Disponible">Disponible</option>
               <option>Asignado</option>
               <option>En Mantenimiento</option>
               <option>Vacaciones</option>
@@ -146,7 +144,7 @@ export default function ResourceForm({ onSuccess }) {
 
           <div className="form-group">
             <label>Proyecto Asignado</label>
-            <select name="project" value={form.project} onChange={handleChange}>  {/* 🆕 Cambiado */}
+            <select name="proyecto_asignado" value={form.proyecto_asignado} onChange={handleChange}>  {/* ✅ CORREGIDO */}
               <option>Sin asignación</option>
               <option>Proyecto Alpha</option>
               <option>Proyecto Beta</option>
