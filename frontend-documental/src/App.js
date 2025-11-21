@@ -11,11 +11,6 @@ function App() {
   const [documents, setDocuments] = useState([]);
   const [filteredDocuments, setFilteredDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    search: '',
-    tipo: '',
-    proyecto: ''
-  });
 
   // Cargar documentos al iniciar
   useEffect(() => {
@@ -37,8 +32,6 @@ function App() {
 
   // Filtrado en cliente (tiempo real)
   const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
-    
     let filtered = documents;
     
     if (newFilters.search) {
@@ -73,32 +66,25 @@ function App() {
     <div className="App">
       <Header />
       
-      {/* LAYOUT VERTICAL - UNA COLUMNA */}
       <div className="vertical-layout">
-        
-        {/* 1. TOTAL DOCUMENTOS */}
         <section className="layout-section">
           <DocumentStats />
         </section>
 
-        {/* 2. REGISTRAR DOCUMENTO */}
         <section className="layout-section">
           <DocumentForm onDocumentCreated={handleDocumentCreated} />
         </section>
 
-        {/* 3. FILTRO DE BÚSQUEDA */}
         <section className="layout-section">
           <SearchFilters onFilterChange={handleFilterChange} />
         </section>
 
-        {/* 4. REPOSITORIO DOCUMENTAL */}
         <section className="layout-section">
           <DocumentTable 
             documents={filteredDocuments}
             onDocumentUpdate={handleDocumentUpdate}
           />
         </section>
-        
       </div>
     </div>
   );
