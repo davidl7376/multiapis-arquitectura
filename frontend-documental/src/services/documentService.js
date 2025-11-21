@@ -2,9 +2,32 @@ import api from './apiService';
 
 export const documentService = {
   // Operaciones CRUD de documentos
-  getAllDocuments: () => api.get('/documents').then(res => res.data),
+  getAllDocuments: () => 
+    api.get('/documents').then(res => 
+      res.data.map(doc => ({
+        id: doc.id,
+        nombre: doc.name,           // name → nombre
+        tipo: doc.type,             // type → tipo
+        proyecto: doc.project,      // project → proyecto
+        version: doc.version,
+        estado: doc.status,         // status → estado
+        creadoPor: doc.created_by   // created_by → creadoPor
+      }))
+    ),
   
-  getDocumentById: (id) => api.get(`/documents/${id}`).then(res => res.data),
+  getDocumentById: (id) => 
+    api.get(`/documents/${id}`).then(res => {
+      const doc = res.data;
+      return {
+        id: doc.id,
+        nombre: doc.name,           // name → nombre
+        tipo: doc.type,             // type → tipo
+        proyecto: doc.project,      // project → proyecto
+        version: doc.version,
+        estado: doc.status,         // status → estado
+        creadoPor: doc.created_by   // created_by → creadoPor
+      };
+    }),
   
   createDocument: (documentData) => {
     // Transformar los campos del frontend al formato que espera la API
