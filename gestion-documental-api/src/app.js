@@ -3,7 +3,17 @@ import cors from "cors";
 import { pool } from "./db.js";
 
 const app = express();
-app.use(cors());
+
+// Configuración CORS mejorada para producción
+app.use(cors({
+  origin: [
+    'https://agreeable-mud-0a2b6d400.3.azurestaticapps.net',
+    'http://localhost:3000'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 const PORT = process.env.PORT || 4002;
@@ -21,6 +31,18 @@ app.get("/db/health", async (_req, res) => {
 // Mantén /health general
 app.get("/health", (_req, res) => res.json({ status: "ok", service: "gestion-documental-api" }));
 
+// Endpoint raíz para evitar "Cannot GET /"
+app.get("/", (_req, res) => {
+  res.json({ 
+    message: "API de Gestión Documental funcionando", 
+    endpoints: {
+      documents: "/documents",
+      stats: "/documents/stats",
+      health: "/health"
+    }
+  });
+});
+
 // Crear documento
 app.post("/documents", async (req, res) => {
   const { name, type, project, version, status, created_by } = req.body ?? {};
@@ -31,7 +53,7 @@ app.post("/documents", async (req, res) => {
       `INSERT INTO gestion_schema.documents(name, type, project, version, status, created_by)
        VALUES($1, $2, $3, $4, $5, $6)
        RETURNING id, name, type, project, version, status, created_by`,
-      [name, type, project, version || null, status || "draft", created_by || null]
+      [name, type, project, version || null, status || "Borrador", created_by || null]
     );
     res.status(201).json(r.rows[0]);
   } catch (e) {
@@ -97,27 +119,36 @@ app.delete("/documents/:id", async (req, res) => {
   }
 });
 
-// ✅ NUEVO: Estadísticas de documentos
+// ✅ CORREGIDO: Estadísticas de documentos - ahora coincide con frontend
 app.get("/documents/stats", async (_req, res) => {
   try {
     const total = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents");
     const active = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='Activo'");
     const review = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='En Revisión'");
+    const draft = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='Borrador'");
+    const archived = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='Archivado'");
+    
+    // Contar proyectos únicos (excluyendo 'sin asignacion')
+    const projectsResult = await pool.query(
+      "SELECT COUNT(DISTINCT project) FROM gestion_schema.documents WHERE project != 'sin asignacion'"
+    );
     
     res.json({
       total: parseInt(total.rows[0].count),
       active: parseInt(active.rows[0].count), 
       review: parseInt(review.rows[0].count),
-      projects: 8 // Por ahora estático
+      draft: parseInt(draft.rows[0].count),
+      archived: parseInt(archived.rows[0].count),
+      projects: parseInt(projectsResult.rows[0].count) || 0
     });
   } catch (e) {
     res.status(500).json({ error: "stats query failed", detail: String(e) });
   }
 });
 
-// ✅ NUEVO: Búsqueda de documentos
+// ✅ CORREGIDO: Búsqueda de documentos - ahora usa campos en inglés
 app.get("/documents/search", async (req, res) => {
-  const { search, tipo, proyecto } = req.query;
+  const { search, type, project } = req.query; // Cambiado de 'tipo' a 'type'
   
   let query = "SELECT * FROM gestion_schema.documents WHERE 1=1";
   const params = [];
@@ -129,16 +160,16 @@ app.get("/documents/search", async (req, res) => {
     params.push(`%${search}%`);
   }
   
-  if (tipo) {
+  if (type) {
     paramCount++;
     query += ` AND type = $${paramCount}`;
-    params.push(tipo);
+    params.push(type);
   }
   
-  if (proyecto) {
+  if (project) {
     paramCount++;
     query += ` AND project = $${paramCount}`;
-    params.push(proyecto);
+    params.push(project);
   }
 
   query += " ORDER BY id ASC";
@@ -152,4 +183,4 @@ app.get("/documents/search", async (req, res) => {
 });
 
 // Inicia el servidor
-app.listen(PORT, () => console.log(`✅ gestion-documental-api on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`✅ gestion-documental-api on port ${PORT}`));
