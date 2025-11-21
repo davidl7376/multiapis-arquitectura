@@ -10,7 +10,6 @@ import './App.css';
 function App() {
   const [documents, setDocuments] = useState([]);
   const [filteredDocuments, setFilteredDocuments] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   // Cargar documentos al iniciar
   useEffect(() => {
@@ -19,14 +18,11 @@ function App() {
 
   const loadDocuments = async () => {
     try {
-      setLoading(true);
       const data = await documentService.getAllDocuments();
       setDocuments(data);
       setFilteredDocuments(data);
     } catch (error) {
       console.error('Error loading documents:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
