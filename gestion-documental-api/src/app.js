@@ -4,9 +4,10 @@ import { pool } from "./db.js";
 
 const app = express();
 
-// Configuración CORS mejorada para producción
+// ✅ CONFIGURACIÓN CORS CORREGIDA - AGREGAR TU URL
 app.use(cors({
   origin: [
+    'https://lively-pond-046373900.3.azurestaticapps.net', // ← ¡AGREGA ESTA LÍNEA!
     'https://agreeable-mud-0a2b6d400.3.azurestaticapps.net',
     'http://localhost:3000'
   ],
@@ -15,6 +16,9 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// ✅ AGREGAR ESTA LÍNEA PARA PREFLIGHT
+app.options('*', cors());
 
 const PORT = process.env.PORT || 4002;
 
