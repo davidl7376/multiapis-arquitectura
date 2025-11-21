@@ -97,5 +97,59 @@ app.delete("/documents/:id", async (req, res) => {
   }
 });
 
+// ✅ NUEVO: Estadísticas de documentos
+app.get("/documents/stats", async (_req, res) => {
+  try {
+    const total = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents");
+    const active = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='Activo'");
+    const review = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='En Revisión'");
+    
+    res.json({
+      total: parseInt(total.rows[0].count),
+      active: parseInt(active.rows[0].count), 
+      review: parseInt(review.rows[0].count),
+      projects: 8 // Por ahora estático
+    });
+  } catch (e) {
+    res.status(500).json({ error: "stats query failed", detail: String(e) });
+  }
+});
+
+// ✅ NUEVO: Búsqueda de documentos
+app.get("/documents/search", async (req, res) => {
+  const { search, tipo, proyecto } = req.query;
+  
+  let query = "SELECT * FROM gestion_schema.documents WHERE 1=1";
+  const params = [];
+  let paramCount = 0;
+
+  if (search) {
+    paramCount++;
+    query += ` AND (name ILIKE $${paramCount} OR created_by ILIKE $${paramCount})`;
+    params.push(`%${search}%`);
+  }
+  
+  if (tipo) {
+    paramCount++;
+    query += ` AND type = $${paramCount}`;
+    params.push(tipo);
+  }
+  
+  if (proyecto) {
+    paramCount++;
+    query += ` AND project = $${paramCount}`;
+    params.push(proyecto);
+  }
+
+  query += " ORDER BY id ASC";
+
+  try {
+    const r = await pool.query(query, params);
+    res.json(r.rows);
+  } catch (e) {
+    res.status(500).json({ error: "search failed", detail: String(e) });
+  }
+});
+
 // Inicia el servidor
 app.listen(PORT, () => console.log(`✅ gestion-documental-api on http://localhost:${PORT}`));

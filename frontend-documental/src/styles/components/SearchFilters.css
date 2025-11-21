@@ -1,0 +1,54 @@
+@import '../variables.css';
+
+.search-filters {
+  background-color: var(--white);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.filters-title {
+  font-size: 1.4rem;
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: var(--spacing-sm);
+}
+
+.filter-label {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.search-input {
+  border: 1px solid var(--gray-300);
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+}
+
+/* GRID PARA FILTROS - 2 COLUMNAS */
+.filters-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,36 @@
+@import '../variables.css';
+
+.document-table-container {
+  background-color: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.table-header h3 {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.document-table th {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  color: var(--text-white);
+  font-weight: var(--font-weight-semibold);
+}
+
+.status-active {
+  background-color: var(--status-active);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.status-review {
+  background-color: var(--status-review);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: var(--font-weight-semibold);
+}
