@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Configuración base de axios - URL DIRECTA DE AZURE
 const api = axios.create({
-  baseURL: 'https://gestion-documental-api-cloud-gucxdbdxb5bac4gf.australiaeast-01.azurewebsites.net/api',
+  baseURL: 'https://gestion-documental-api-cloud-gucxdbdxb5bac4gf.australiaeast-01.azurewebsites.net',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
