@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { documentService } from '../services/documentService';
 import '../styles/components/DocumentTable.css';
 
 const DocumentTable = ({ documents = [], onDocumentUpdate }) => {
-  const [error, setError] = useState(null);
-
   const handleDelete = async (id, nombre) => {
     if (window.confirm(`¿Estás seguro de eliminar el documento "${nombre}"?`)) {
       try {
@@ -38,14 +36,6 @@ const DocumentTable = ({ documents = [], onDocumentUpdate }) => {
         return 'status-active';
     }
   };
-
-  if (error) {
-    return (
-      <div className="document-table-container card">
-        <div className="error-state">Error: {error}</div>
-      </div>
-    );
-  }
 
   return (
     <div className="document-table-container card">
