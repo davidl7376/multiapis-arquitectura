@@ -48,11 +48,21 @@ export default function ResourceForm({ onSuccess }) {
       
       setMessage("✅ Personal registrado exitosamente");
       
+      // ✅ AUTO-LIMPIADO: Ocultar mensaje después de 5 segundos
+      setTimeout(() => {
+        setMessage("");
+      }, 5000);
+      
       if (onSuccess) onSuccess();
       
     } catch (error) {
       console.error("Error al registrar personal:", error);
       setMessage("❌ Error al registrar personal");
+      
+      // ✅ AUTO-LIMPIADO: Ocultar mensaje de error también
+      setTimeout(() => {
+        setMessage("");
+      }, 5000);
     } finally {
       setLoading(false);
     }

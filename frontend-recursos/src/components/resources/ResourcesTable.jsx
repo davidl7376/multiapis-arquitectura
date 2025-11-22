@@ -25,20 +25,27 @@ export default function ResourcesTable() {
     loadPersonal();
   }, []);
 
-  const getEstadoBadge = (estado) => {
-    const badges = {
-      'Asignado': 'A',
-      'Disponible': 'D', 
-      'En Mantenimiento': 'M',
-      'Vacaciones': 'V'
-    };
-    return badges[estado] || estado;
+  const getStatusClass = (estado) => {
+    switch (estado?.toLowerCase()) {
+      case 'disponible':
+        return 'status-disponible';
+      case 'asignado':
+        return 'status-asignado';
+      case 'en mantenimiento':
+        return 'status-mantenimiento';
+      case 'vacaciones':
+        return 'status-vacaciones';
+      default:
+        return 'status-disponible';
+    }
   };
 
   if (loading) {
     return (
-      <div className="resources-table-card">
-        <h3>Recursos de Personal</h3>
+      <div className="resources-table-container card">
+        <div className="table-header">
+          <h3>Recursos de Personal</h3>
+        </div>
         <div className="loading">Cargando personal...</div>
       </div>
     );
@@ -46,8 +53,10 @@ export default function ResourcesTable() {
 
   if (error) {
     return (
-      <div className="resources-table-card">
-        <h3>Recursos de Personal</h3>
+      <div className="resources-table-container card">
+        <div className="table-header">
+          <h3>Recursos de Personal</h3>
+        </div>
         <div className="error">
           {error}
           <button onClick={loadPersonal} className="retry-btn">
@@ -59,47 +68,54 @@ export default function ResourcesTable() {
   }
 
   return (
-    <div className="resources-table-card">
-      <h3>Recursos de Personal ({resources.length})</h3>
+    <div className="resources-table-container card">
+      <div className="table-header">
+        <h3>Recursos de Personal</h3>
+      </div>
 
-      <table className="resources-table">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Rol</th>
-            <th>Especialización</th>
-            <th>Estado</th>
-            <th>Proyecto Asignado</th>
-            <th>Contacto</th>
-          </tr>
-        </thead>
-        <tbody>
-          {resources.length > 0 ? resources.map((resource, index) => (
-            <tr key={resource.id || resource._id || index}>
-              {/* ✅ CAMPOS CORREGIDOS */}
-              <td className="nombre-cell">{resource.nombre_completo}</td>
-              <td>{resource.rol}</td>
-              <td>{resource.especializacion || "N/A"}</td>
-              <td>
-                <span className={`estado-badge estado-${getEstadoBadge(resource.estado)}`}>
-                  ({getEstadoBadge(resource.estado)}) {resource.estado || "Disponible"}
-                </span>
-              </td>
-              <td>{resource.proyecto_asignado || "Sin asignar"}</td>
-              <td className="contacto-cell">
-                <div>{resource.email || "N/A"}</div>
-                <div className="telefono">{resource.telefono || "N/A"}</div>
-              </td>
-            </tr>
-          )) : (
+      <div className="table-responsive">
+        <table className="resources-table">
+          <thead>
             <tr>
-              <td colSpan="6" className="no-data">
-                No hay personal registrado
-              </td>
+              <th>Nombre</th>
+              <th>Rol</th>
+              <th>Especialización</th>
+              <th>Estado</th>
+              <th>Proyecto Asignado</th>
+              <th>Contacto</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {resources.length > 0 ? resources.map((resource, index) => (
+              <tr key={resource.id || resource._id || index}>
+                <td className="nombre-cell">{resource.nombre_completo}</td>
+                <td>{resource.rol}</td>
+                <td>{resource.especializacion || "N/A"}</td>
+                <td>
+                  <span className={getStatusClass(resource.estado)}>
+                    {resource.estado || "Disponible"}
+                  </span>
+                </td>
+                <td>{resource.proyecto_asignado || "Sin asignación"}</td>
+                <td className="contacto-cell">
+                  <div>{resource.email || "N/A"}</div>
+                  <div className="telefono">{resource.telefono || "N/A"}</div>
+                </td>
+              </tr>
+            )) : (
+              <tr>
+                <td colSpan="6" className="no-data">
+                  No hay personal registrado
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="table-footer">
+        <p>Mostrando {resources.length} recursos de personal</p>
+      </div>
     </div>
   );
 }

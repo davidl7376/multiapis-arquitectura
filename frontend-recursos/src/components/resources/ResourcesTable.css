@@ -1,130 +1,219 @@
-.resources-table-card {
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+.resources-table-container {
+  background-color: var(--white, #ffffff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: var(--border-radius-lg, 0.5rem);
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 500px;
 }
 
-.resources-table-card h3 {
-  margin: 0;
-  padding: 20px;
-  background: #f8f9fa;
-  color: #2c3e50;
-  font-size: 18px;
-  border-bottom: 1px solid #e1e8ed;
+.table-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--gray-200, #e5e7eb);
+}
+
+.table-header h3 {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--text-primary, #1f2937);
+  margin: 0 0 0.5rem 0;
+}
+
+.table-responsive {
+  flex: 1;
+  overflow: auto;
+  padding: 0 1.5rem;
 }
 
 .resources-table {
   width: 100%;
+  min-width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
 }
 
 .resources-table th {
-  background: #f8f9fa;
-  padding: 12px 15px;
+  background: linear-gradient(135deg, var(--primary-color, #2563eb) 0%, var(--primary-dark, #1d4ed8) 100%);
+  color: var(--text-white, #ffffff);
+  font-weight: var(--font-weight-semibold, 600);
+  padding: 1rem;
   text-align: left;
-  font-weight: 600;
-  color: #2c3e50;
-  border-bottom: 1px solid #e1e8ed;
-  font-size: 14px;
+  position: sticky;
+  top: 0;
 }
 
 .resources-table td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #ecf0f1;
-  color: #2c3e50;
-  font-size: 14px;
-}
-
-.resources-table tr:hover {
-  background: #f8f9fa;
+  padding: 1rem;
+  border-bottom: 1px solid var(--gray-100, #f3f4f6);
+  vertical-align: middle;
 }
 
 .nombre-cell {
-  font-weight: 600;
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--text-primary, #1f2937);
 }
 
 .contacto-cell {
-  font-size: 13px;
+  font-size: 0.875rem;
 }
 
 .telefono {
-  color: #7f8c8d;
-  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
 }
 
-.estado-badge {
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
+/* Estados con diseño idéntico al documental */
+.status-disponible {
+  background-color: var(--success-color, #10b981);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: var(--font-weight-semibold, 600);
+  font-size: 0.875rem;
+  display: inline-block;
 }
 
-.estado-A {
-  background: #e8f5e8;
-  color: #2e7d32;
+.status-asignado {
+  background-color: var(--warning-color, #f59e0b);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: var(--font-weight-semibold, 600);
+  font-size: 0.875rem;
+  display: inline-block;
 }
 
-.estado-D {
-  background: #e3f2fd;
-  color: #1565c0;
+.status-mantenimiento {
+  background-color: var(--error-color, #ef4444);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: var(--font-weight-semibold, 600);
+  font-size: 0.875rem;
+  display: inline-block;
 }
 
-.estado-M {
-  background: #fff3e0;
-  color: #ef6c00;
+.status-vacaciones {
+  background-color: #8b5cf6;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: var(--font-weight-semibold, 600);
+  font-size: 0.875rem;
+  display: inline-block;
 }
 
-.estado-V {
-  background: #fce4ec;
-  color: #c2185b;
+.table-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--gray-200, #e5e7eb);
+  background-color: var(--gray-50, #f9fafb);
+  color: var(--text-secondary, #6b7280);
+  font-size: 0.875rem;
 }
 
-.no-data {
-  text-align: center;
-  color: #7f8c8d;
-  font-style: italic;
-  padding: 40px !important;
-}
-
-/* 🆕 ESTILOS LOADING/ERROR - FUERA DEL MEDIA QUERY */
-.loading {
+/* Estados de carga y error */
+.loading, .error {
   text-align: center;
   padding: 2rem;
-  color: #666;
+  margin: 1rem;
+  border-radius: var(--border-radius, 0.375rem);
+}
+
+.loading {
+  color: var(--text-secondary, #6b7280);
   font-style: italic;
 }
 
 .error {
-  text-align: center;
-  padding: 2rem;
-  color: #d32f2f;
+  color: var(--error-color, #ef4444);
   background: #ffebee;
-  border-radius: 8px;
-  margin: 1rem 0;
 }
 
 .retry-btn {
   margin-top: 0.5rem;
   padding: 0.5rem 1rem;
-  background: #d32f2f;
+  background: var(--error-color, #ef4444);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--border-radius, 0.375rem);
   cursor: pointer;
+  font-weight: var(--font-weight-medium, 500);
 }
 
 .retry-btn:hover {
-  background: #b71c1c;
+  background: var(--error-dark, #dc2626);
 }
 
+.no-data {
+  text-align: center;
+  color: var(--text-secondary, #6b7280);
+  font-style: italic;
+  padding: 2rem !important;
+}
+
+/* Scroll personalizado */
+.table-responsive::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: var(--gray-100, #f3f4f6);
+  border-radius: 3px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: var(--gray-400, #9ca3af);
+  border-radius: 3px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500, #6b7280);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .resources-table {
-    display: block;
-    overflow-x: auto;
+  .table-responsive {
+    padding: 0 1rem;
   }
   
-  .resources-table-card h3 {
-    padding: 15px;
+  .resources-table th,
+  .resources-table td {
+    padding: 0.75rem 0.5rem;
   }
+  
+  .table-header {
+    padding: 1rem;
+  }
+  
+  .table-header h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Variables CSS */
+:root {
+  --white: #ffffff;
+  --primary-color: #2563eb;
+  --primary-dark: #1d4ed8;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-white: #ffffff;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --border-radius: 0.375rem;
+  --border-radius-lg: 0.5rem;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
