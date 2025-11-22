@@ -26,12 +26,18 @@ export default function ResourcesPage() {
 
   return (
     <div className="resources-page">
-      <div className="resources-header">
-        <h1>Gestión de Recursos</h1>
-        <p className="resources-subtitle">
-          Control de personal y equipos con asignación a proyectos
-        </p>
-      </div>
+      {/* HEADER ACTUALIZADO CON DISEÑO DOCUMENTAL */}
+      <header className="resources-header">
+        <div className="header-content">
+          <h1 className="app-title">IngeSmart</h1>
+          <p className="app-subtitle">
+            Gestión de Recursos
+          </p>
+          <p className="header-description">
+            Control de personal y equipos con asignación a proyectos
+          </p>
+        </div>
+      </header>
 
       <ResourcesForm onSuccess={fetchResources} />
       
