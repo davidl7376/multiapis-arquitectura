@@ -1,5 +1,20 @@
 import api from './apiService';
 
+// ✅ FUNCIÓN PARA TRANSFORMAR ESTADOS
+const transformarEstado = (estadoIngles) => {
+  const estados = {
+    'draft': 'Borrador',
+    'active': 'Activo', 
+    'review': 'En Revisión',
+    'archived': 'Archivado',
+    'Borrador': 'Borrador',
+    'Activo': 'Activo',
+    'En Revisión': 'En Revisión',
+    'Archivado': 'Archivado'
+  };
+  return estados[estadoIngles] || estadoIngles;
+};
+
 export const documentService = {
   // Operaciones CRUD de documentos
   getAllDocuments: () => 
@@ -10,8 +25,9 @@ export const documentService = {
         tipo: doc.type,             // type → tipo
         proyecto: doc.project,      // project → proyecto
         version: doc.version,
-        estado: doc.status,         // status → estado
-        creadoPor: doc.created_by   // created_by → creadoPor
+        estado: transformarEstado(doc.status),  // ← TRANSFORMAR ESTADO
+        creadoPor: doc.created_by,  // created_by → creadoPor
+        fecha: doc.fecha || new Date().toISOString().split('T')[0] // Agregar fecha si falta
       }))
     ),
   
@@ -24,7 +40,7 @@ export const documentService = {
         tipo: doc.type,             // type → tipo
         proyecto: doc.project,      // project → proyecto
         version: doc.version,
-        estado: doc.status,         // status → estado
+        estado: transformarEstado(doc.status),  // ← TRANSFORMAR ESTADO
         creadoPor: doc.created_by   // created_by → creadoPor
       };
     }),
