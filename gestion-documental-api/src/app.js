@@ -7,7 +7,7 @@ const app = express();
 // ✅ CONFIGURACIÓN CORS CORREGIDA - AGREGAR TU URL
 app.use(cors({
   origin: [
-    'https://lively-pond-046373900.3.azurestaticapps.net', // ← ¡AGREGA ESTA LÍNEA!
+    'https://lively-pond-046373900.3.azurestaticapps.net',
     'https://agreeable-mud-0a2b6d400.3.azurestaticapps.net',
     'http://localhost:3000'
   ],
@@ -65,7 +65,72 @@ app.post("/documents", async (req, res) => {
   }
 });
 
-// Listar documentos
+// ✅ CORREGIDO: ORDEN DE RUTAS - ESPECÍFICAS PRIMERO
+
+// 1. Estadísticas PRIMERO (antes de /documents/:id)
+app.get("/documents/stats", async (_req, res) => {
+  try {
+    const total = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents");
+    const active = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='Activo'");
+    const review = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='En Revisión'");
+    const draft = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='Borrador'");
+    const archived = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='Archivado'");
+    
+    // Contar proyectos únicos (excluyendo 'sin asignacion')
+    const projectsResult = await pool.query(
+      "SELECT COUNT(DISTINCT project) FROM gestion_schema.documents WHERE project != 'sin asignacion'"
+    );
+    
+    res.json({
+      total: parseInt(total.rows[0].count),
+      active: parseInt(active.rows[0].count), 
+      review: parseInt(review.rows[0].count),
+      draft: parseInt(draft.rows[0].count),
+      archived: parseInt(archived.rows[0].count),
+      projects: parseInt(projectsResult.rows[0].count) || 0
+    });
+  } catch (e) {
+    res.status(500).json({ error: "stats query failed", detail: String(e) });
+  }
+});
+
+// 2. Búsqueda SEGUNDO (antes de /documents/:id)
+app.get("/documents/search", async (req, res) => {
+  const { search, type, project } = req.query;
+  
+  let query = "SELECT * FROM gestion_schema.documents WHERE 1=1";
+  const params = [];
+  let paramCount = 0;
+
+  if (search) {
+    paramCount++;
+    query += ` AND (name ILIKE $${paramCount} OR created_by ILIKE $${paramCount})`;
+    params.push(`%${search}%`);
+  }
+  
+  if (type) {
+    paramCount++;
+    query += ` AND type = $${paramCount}`;
+    params.push(type);
+  }
+  
+  if (project) {
+    paramCount++;
+    query += ` AND project = $${paramCount}`;
+    params.push(project);
+  }
+
+  query += " ORDER BY id ASC";
+
+  try {
+    const r = await pool.query(query, params);
+    res.json(r.rows);
+  } catch (e) {
+    res.status(500).json({ error: "search failed", detail: String(e) });
+  }
+});
+
+// 3. Listar documentos GENERAL
 app.get("/documents", async (_req, res) => {
   try {
     const r = await pool.query(
@@ -77,7 +142,7 @@ app.get("/documents", async (_req, res) => {
   }
 });
 
-// GET documento por ID
+// 4. Rutas con parámetros ÚLTIMAS
 app.get("/documents/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -120,69 +185,6 @@ app.delete("/documents/:id", async (req, res) => {
     res.json({ deletedId: r.rows[0].id });
   } catch (e) {
     res.status(500).json({ error: "delete failed", detail: String(e) });
-  }
-});
-
-// ✅ CORREGIDO: Estadísticas de documentos - ahora coincide con frontend
-app.get("/documents/stats", async (_req, res) => {
-  try {
-    const total = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents");
-    const active = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='Activo'");
-    const review = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='En Revisión'");
-    const draft = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='Borrador'");
-    const archived = await pool.query("SELECT COUNT(*) FROM gestion_schema.documents WHERE status='Archivado'");
-    
-    // Contar proyectos únicos (excluyendo 'sin asignacion')
-    const projectsResult = await pool.query(
-      "SELECT COUNT(DISTINCT project) FROM gestion_schema.documents WHERE project != 'sin asignacion'"
-    );
-    
-    res.json({
-      total: parseInt(total.rows[0].count),
-      active: parseInt(active.rows[0].count), 
-      review: parseInt(review.rows[0].count),
-      draft: parseInt(draft.rows[0].count),
-      archived: parseInt(archived.rows[0].count),
-      projects: parseInt(projectsResult.rows[0].count) || 0
-    });
-  } catch (e) {
-    res.status(500).json({ error: "stats query failed", detail: String(e) });
-  }
-});
-
-// ✅ CORREGIDO: Búsqueda de documentos - ahora usa campos en inglés
-app.get("/documents/search", async (req, res) => {
-  const { search, type, project } = req.query; // Cambiado de 'tipo' a 'type'
-  
-  let query = "SELECT * FROM gestion_schema.documents WHERE 1=1";
-  const params = [];
-  let paramCount = 0;
-
-  if (search) {
-    paramCount++;
-    query += ` AND (name ILIKE $${paramCount} OR created_by ILIKE $${paramCount})`;
-    params.push(`%${search}%`);
-  }
-  
-  if (type) {
-    paramCount++;
-    query += ` AND type = $${paramCount}`;
-    params.push(type);
-  }
-  
-  if (project) {
-    paramCount++;
-    query += ` AND project = $${paramCount}`;
-    params.push(project);
-  }
-
-  query += " ORDER BY id ASC";
-
-  try {
-    const r = await pool.query(query, params);
-    res.json(r.rows);
-  } catch (e) {
-    res.status(500).json({ error: "search failed", detail: String(e) });
   }
 });
 
