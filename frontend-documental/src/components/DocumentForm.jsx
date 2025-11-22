@@ -15,6 +15,7 @@ const DocumentForm = ({ onDocumentCreated, editDocument }) => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   // Si estamos editando, cargar los datos del documento
   useEffect(() => {
@@ -61,6 +62,7 @@ const DocumentForm = ({ onDocumentCreated, editDocument }) => {
       [name]: value
     }));
     if (error) setError('');
+    if (successMessage) setSuccessMessage('');
   };
 
   const handleSubmit = async (e) => {
@@ -73,12 +75,15 @@ const DocumentForm = ({ onDocumentCreated, editDocument }) => {
 
     setLoading(true);
     setError('');
+    setSuccessMessage('');
 
     try {
       if (editDocument) {
         await documentService.updateDocument(editDocument.id, formData);
+        setSuccessMessage('✅ Documento actualizado correctamente');
       } else {
         await documentService.createDocument(formData);
+        setSuccessMessage('✅ Documento registrado correctamente');
       }
       
       // Resetear formulario
@@ -95,6 +100,11 @@ const DocumentForm = ({ onDocumentCreated, editDocument }) => {
       if (onDocumentCreated) {
         onDocumentCreated();
       }
+
+      // Auto-ocultar mensaje después de 5 segundos
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 5000);
 
     } catch (err) {
       console.error('Error saving document:', err);
@@ -117,6 +127,12 @@ const DocumentForm = ({ onDocumentCreated, editDocument }) => {
       {error && (
         <div className="error-message">
           {error}
+        </div>
+      )}
+
+      {successMessage && (
+        <div className="success-message">
+          {successMessage}
         </div>
       )}
 

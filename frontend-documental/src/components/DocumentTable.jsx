@@ -41,9 +41,7 @@ const DocumentTable = ({ documents = [], onDocumentUpdate }) => {
     <div className="document-table-container card">
       <div className="table-header">
         <h3>Repositorio Documental</h3>
-        <p className="table-subtitle">
-          Metadatos de documentos - No se almacenan archivos, solo referencias
-        </p>
+        {/* TEXTO ELIMINADO */}
       </div>
 
       <div className="table-responsive">
