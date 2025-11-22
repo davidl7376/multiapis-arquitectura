@@ -4,13 +4,13 @@ import "./ResourcesForm.css";
 
 export default function ResourceForm({ onSuccess }) {
   const [form, setForm] = useState({
-    nombre_completo: "",          // ✅ CORREGIDO
-    rol: "",                      // ✅ CORREGIDO  
+    nombre_completo: "",
+    rol: "",
     especializacion: "",
     email: "",
     telefono: "",
     estado: "Disponible",
-    proyecto_asignado: "Sin asignación"  // ✅ CORREGIDO
+    proyecto_asignado: "Sin asignación"
   });
 
   const [loading, setLoading] = useState(false);
@@ -24,7 +24,7 @@ export default function ResourceForm({ onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!form.nombre_completo || !form.rol || !form.email) {  // ✅ CORREGIDO
+    if (!form.nombre_completo || !form.rol || !form.email) {
       alert("Por favor completa los campos obligatorios");
       return;
     }
@@ -37,13 +37,13 @@ export default function ResourceForm({ onSuccess }) {
       
       // Limpiar formulario
       setForm({
-        nombre_completo: "",      // ✅ CORREGIDO
-        rol: "",                  // ✅ CORREGIDO
+        nombre_completo: "",
+        rol: "",
         especializacion: "",
         email: "",
         telefono: "",
         estado: "Disponible",
-        proyecto_asignado: "Sin asignación"  // ✅ CORREGIDO
+        proyecto_asignado: "Sin asignación"
       });
       
       setMessage("✅ Personal registrado exitosamente");
@@ -59,32 +59,45 @@ export default function ResourceForm({ onSuccess }) {
   };
 
   return (
-    <div className="resource-form-card">
-      <h3>Registrar Nuevo Personal</h3>
-      <p className="form-description">Complete la información del personal para agregarlo al sistema</p>
-      
+    <div className="resource-form card">
+      <h3 className="form-title">Registrar Nuevo Personal</h3>
+      <p className="form-subtitle">
+        Complete la información del personal para agregarlo al sistema
+      </p>
+
       {message && (
         <div className={`form-message ${message.includes('✅') ? 'success' : 'error'}`}>
           {message}
         </div>
       )}
-      
-      <form className="resource-form-body" onSubmit={handleSubmit}>
-        <div className="form-row two-cols">
+
+      <form onSubmit={handleSubmit}>
+        <div className="form-grid">
+          {/* Fila 1: Nombre Completo + Rol */}
           <div className="form-group">
-            <label>Nombre Completo *</label>
+            <label className="form-label">Nombre Completo *</label>
             <input
-              name="nombre_completo"    // ✅ CORREGIDO
+              type="text"
+              name="nombre_completo"
+              className="form-control"
               placeholder="Ej: Juan Pérez García"
               value={form.nombre_completo}
               onChange={handleChange}
+              disabled={loading}
               required
             />
           </div>
 
           <div className="form-group">
-            <label>Rol *</label>
-            <select name="rol" value={form.rol} onChange={handleChange} required>  {/* ✅ CORREGIDO */}
+            <label className="form-label">Rol *</label>
+            <select
+              name="rol"
+              className="form-control"
+              value={form.rol}
+              onChange={handleChange}
+              disabled={loading}
+              required
+            >
               <option value="">Seleccionar rol</option>
               <option>Ingeniero Civil</option>
               <option>Técnico Eléctrico</option>
@@ -95,46 +108,59 @@ export default function ResourceForm({ onSuccess }) {
               <option>Supervisor de Obra</option>
             </select>
           </div>
-        </div>
 
-        <div className="form-row">
-          <label>Especialización</label>
-          <input
-            name="especializacion"
-            placeholder="Ej: Estructuras, Instalaciones, etc."
-            value={form.especializacion}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-row two-cols">
-          <div className="form-group">
-            <label>Email *</label>
+          {/* Fila 2: Especialización (ancho completo) */}
+          <div className="form-group full-width">
+            <label className="form-label">Especialización</label>
             <input
-              name="email"
+              type="text"
+              name="especializacion"
+              className="form-control"
+              placeholder="Ej: Estructuras, Instalaciones, etc."
+              value={form.especializacion}
+              onChange={handleChange}
+              disabled={loading}
+            />
+          </div>
+
+          {/* Fila 3: Email + Teléfono */}
+          <div className="form-group">
+            <label className="form-label">Email *</label>
+            <input
               type="email"
-              placeholder="correo@caleda.com"
+              name="email"
+              className="form-control"
+              placeholder="correo@empresa.com"
               value={form.email}
               onChange={handleChange}
+              disabled={loading}
               required
             />
           </div>
 
           <div className="form-group">
-            <label>Teléfono</label>
+            <label className="form-label">Teléfono</label>
             <input
+              type="text"
               name="telefono"
+              className="form-control"
               placeholder="+52 555 1234-5678"
               value={form.telefono}
               onChange={handleChange}
+              disabled={loading}
             />
           </div>
-        </div>
 
-        <div className="form-row two-cols">
+          {/* Fila 4: Estado + Proyecto Asignado */}
           <div className="form-group">
-            <label>Estado</label>
-            <select name="estado" value={form.estado} onChange={handleChange}>
+            <label className="form-label">Estado</label>
+            <select
+              name="estado"
+              className="form-control"
+              value={form.estado}
+              onChange={handleChange}
+              disabled={loading}
+            >
               <option value="Disponible">Disponible</option>
               <option>Asignado</option>
               <option>En Mantenimiento</option>
@@ -143,8 +169,14 @@ export default function ResourceForm({ onSuccess }) {
           </div>
 
           <div className="form-group">
-            <label>Proyecto Asignado</label>
-            <select name="proyecto_asignado" value={form.proyecto_asignado} onChange={handleChange}>  {/* ✅ CORREGIDO */}
+            <label className="form-label">Proyecto Asignado</label>
+            <select
+              name="proyecto_asignado"
+              className="form-control"
+              value={form.proyecto_asignado}
+              onChange={handleChange}
+              disabled={loading}
+            >
               <option>Sin asignación</option>
               <option>Proyecto Alpha</option>
               <option>Proyecto Beta</option>
@@ -157,7 +189,7 @@ export default function ResourceForm({ onSuccess }) {
         <div className="form-actions">
           <button 
             type="submit" 
-            className="btn-primary"
+            className="btn btn-primary"
             disabled={loading}
           >
             {loading ? "Registrando..." : "Registrar Personal"}
