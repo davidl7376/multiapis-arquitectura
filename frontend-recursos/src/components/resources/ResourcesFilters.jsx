@@ -15,17 +15,18 @@ export default function ResourcesFilters() {
   };
 
   return (
-    <div className="resources-filters">
+    <div className="resources-filters card">
       <div className="filters-header">
-        <h4>Personal</h4>
-        <p>Ingenieros, técnicos, supervisores y más</p>
+        <h3>Filtros de Búsqueda</h3>
+        <p>Buscar personal por nombre, rol o estado</p>
       </div>
       
-      <div className="filter-row">
+      <div className="filter-grid">
         <div className="filter-group">
-          <label>Buscar por nombre o rol</label>
+          <label className="filter-label">Buscar por nombre o rol</label>
           <input 
             name="search"
+            className="filter-control"
             placeholder="Buscar personal..." 
             value={filters.search}
             onChange={handleChange}
@@ -33,8 +34,13 @@ export default function ResourcesFilters() {
         </div>
 
         <div className="filter-group">
-          <label>Estado</label>
-          <select name="estado" value={filters.estado} onChange={handleChange}>
+          <label className="filter-label">Estado</label>
+          <select 
+            name="estado" 
+            className="filter-control"
+            value={filters.estado} 
+            onChange={handleChange}
+          >
             <option value="">Todos los estados</option>
             <option>Asignado</option>
             <option>Disponible</option>

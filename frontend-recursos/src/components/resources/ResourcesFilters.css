@@ -1,66 +1,98 @@
 .resources-filters {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 30px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  background-color: var(--white, #ffffff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: var(--border-radius-lg, 0.5rem);
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+  padding: var(--spacing-xl, 2rem);
+  margin-bottom: var(--spacing-xl, 2rem);
 }
 
 .filters-header {
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-lg, 1.5rem);
 }
 
-.filters-header h4 {
-  margin: 0 0 5px 0;
-  color: #2c3e50;
-  font-size: 16px;
-  font-weight: 600;
+.filters-header h3 {
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--text-primary, #1f2937);
+  margin: 0 0 var(--spacing-sm, 0.5rem) 0;
 }
 
 .filters-header p {
+  color: var(--text-secondary, #6b7280);
   margin: 0;
-  color: #7f8c8d;
-  font-size: 14px;
+  font-size: 0.9rem;
 }
 
-.filter-row {
-  display: flex;
-  gap: 20px;
+.filter-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--spacing-lg, 1.5rem);
   align-items: end;
 }
 
 .filter-group {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--spacing-sm, 0.5rem);
 }
 
-.filter-group label {
-  font-weight: 600;
-  color: #2c3e50;
-  font-size: 14px;
+.filter-label {
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--text-primary, #1f2937);
+  font-size: 0.9rem;
 }
 
-.filter-group input,
-.filter-group select {
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: border-color 0.3s;
+.filter-control {
+  padding: 12px;
+  border: 1px solid var(--gray-300, #d1d5db);
+  border-radius: var(--border-radius, 0.375rem);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background-color: var(--white, #ffffff);
+  color: var(--text-primary, #1f2937);
+  font-weight: var(--font-weight-normal, 400);
 }
 
-.filter-group input:focus,
-.filter-group select:focus {
+.filter-control:focus {
   outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  border-color: var(--primary-color, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+.filter-control::placeholder {
+  color: var(--text-light, #9ca3af);
+  font-weight: var(--font-weight-normal, 400);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .filter-row {
-    flex-direction: column;
-    gap: 15px;
+  .filter-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1rem);
   }
+  
+  .resources-filters {
+    padding: var(--spacing-lg, 1.5rem);
+  }
+}
+
+/* Variables CSS */
+:root {
+  --white: #ffffff;
+  --primary-color: #2563eb;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-light: #9ca3af;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --border-radius: 0.375rem;
+  --border-radius-lg: 0.5rem;
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }

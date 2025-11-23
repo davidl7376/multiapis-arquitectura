@@ -1,66 +1,165 @@
-.project-assignment-card {
-  background: white;
-  border-radius: 8px;
-  padding: 25px;
-  margin-bottom: 30px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  border: 1px solid #e1e8ed;
+.project-assignment {
+  background-color: var(--white, #ffffff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: var(--border-radius-lg, 0.5rem);
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+  margin-bottom: var(--spacing-xl, 2rem);
+  overflow: hidden;
 }
 
-.project-assignment-card h3 {
-  margin: 0 0 20px 0;
-  color: #2c3e50;
-  font-size: 18px;
-  border-bottom: 2px solid #3498db;
-  padding-bottom: 10px;
+.table-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--gray-200, #e5e7eb);
+  background: linear-gradient(135deg, var(--primary-color, #2563eb) 0%, var(--primary-dark, #1d4ed8) 100%);
 }
 
-.assignment-form {
+.table-header h3 {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--text-white, #ffffff);
+  margin: 0;
+}
+
+.assignment-content {
+  padding: 1.5rem;
+}
+
+.assignment-message {
+  padding: 12px 16px;
+  border-radius: var(--border-radius, 0.375rem);
+  margin-bottom: var(--spacing-lg, 1.5rem);
+  font-weight: var(--font-weight-medium, 500);
+  animation: slideIn 0.3s ease-out;
+}
+
+.assignment-message.success {
+  background-color: var(--success-color, #10b981);
+  color: var(--text-white, #ffffff);
+  border-left: 4px solid var(--success-dark, #059669);
+}
+
+.assignment-message.error {
+  background-color: var(--error-color, #ef4444);
+  color: var(--text-white, #ffffff);
+  border-left: 4px solid var(--error-dark, #dc2626);
+}
+
+.assignment-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 15px;
+  grid-template-columns: 2fr 1.5fr auto;
+  gap: var(--spacing-lg, 1.5rem);
   align-items: end;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--spacing-sm, 0.5rem);
 }
 
-.form-group label {
-  font-weight: 600;
-  color: #2c3e50;
-  font-size: 14px;
+.form-label {
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--text-primary, #1f2937);
+  font-size: 0.9rem;
 }
 
-.form-group select {
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  background: white;
+.form-control {
+  padding: 12px;
+  border: 1px solid var(--gray-300, #d1d5db);
+  border-radius: var(--border-radius, 0.375rem);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background-color: var(--white, #ffffff);
+  color: var(--text-primary, #1f2937);
+  font-weight: var(--font-weight-normal, 400);
 }
 
-.btn-assign {
-  background: #27ae60;
-  color: white;
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.btn {
+  padding: 12px 24px;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: var(--border-radius, 0.375rem);
+  font-weight: var(--font-weight-semibold, 600);
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.2s;
+  font-size: 0.95rem;
   height: fit-content;
 }
 
-.btn-assign:hover {
-  background: #219653;
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-color, #2563eb) 0%, var(--primary-dark, #1d4ed8) 100%);
+  color: var(--text-white, #ffffff);
 }
 
-@media (max-width: 768px) {
-  .assignment-form {
-    grid-template-columns: 1fr;
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.assign-btn {
+  white-space: nowrap;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .assignment-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1rem);
+  }
+  
+  .assignment-content {
+    padding: 1rem;
+  }
+  
+  .assign-btn {
+    width: 100%;
+  }
+}
+
+/* Variables CSS */
+:root {
+  --white: #ffffff;
+  --primary-color: #2563eb;
+  --primary-dark: #1d4ed8;
+  --success-color: #10b981;
+  --success-dark: #059669;
+  --error-color: #ef4444;
+  --error-dark: #dc2626;
+  --text-primary: #1f2937;
+  --text-white: #ffffff;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --border-radius: 0.375rem;
+  --border-radius-lg: 0.5rem;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
