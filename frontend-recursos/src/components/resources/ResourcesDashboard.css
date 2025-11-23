@@ -22,29 +22,14 @@
   border: 2px solid transparent;
 }
 
-/* Colores específicos para recursos - igual al diseño documental */
-.stat-total {
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-  border-color: #2563eb;
-  color: #2563eb;
-}
-
-.stat-disponible {
-  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-  border-color: #10b981;
-  color: #10b981;
-}
-
-.stat-asignado {
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  border-color: #f59e0b;
-  color: #f59e0b;
-}
-
+/* TARJETAS EN ESTILO GRIS UNIFORME - SOLO ESTA SECCIÓN */
+.stat-total,
+.stat-disponible,
+.stat-asignado,
 .stat-proyectos {
-  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-  border-color: #6366f1;
-  color: #6366f1;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-color: #cbd5e1;
+  color: #475569;
 }
 
 .stat-value {
@@ -107,15 +92,10 @@
   }
 }
 
-/* Variables CSS por si no las tienes */
+/* Variables CSS */
 :root {
   --white: #ffffff;
-  --primary-light: #dbeafe;
-  --primary-color: #2563eb;
-  --success-color: #10b981;
-  --warning-color: #f59e0b;
   --text-primary: #1f2937;
-  --text-secondary: #6b7280;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
