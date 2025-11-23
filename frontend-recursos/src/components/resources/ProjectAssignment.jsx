@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { recursosService } from "../../services/recursosService";
 import "./ProjectAssignment.css";
 
 export default function ProjectAssignment({ resources = [], onAssignmentUpdate }) {
@@ -20,8 +19,14 @@ export default function ProjectAssignment({ resources = [], onAssignmentUpdate }
     setMessage("");
 
     try {
-      // ✅ USANDO recursosService EN LUGAR DE fetch DIRECTAMENTE
-      const res = await recursosService.asignarPersonal(assignment.personalId, assignment.proyecto);
+      // ✅ VOLVEMOS A USAR fetch DIRECTAMENTE
+      const res = await fetch(`https://recursos-api-cloud-gtaqgsf2hbfvgac5.australiaeast-01.azurewebsites.net/recursos/${assignment.personalId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          proyecto_asignado: assignment.proyecto
+        })
+      });
 
       if (res.ok) {
         setMessage("✅ Personal asignado correctamente");
