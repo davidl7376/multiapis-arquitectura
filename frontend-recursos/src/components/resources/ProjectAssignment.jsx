@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { proyectosService } from "../../services/recursosService";
 import "./ProjectAssignment.css";
 
 export default function ProjectAssignment({ resources = [], onAssignmentUpdate }) {
@@ -19,31 +20,31 @@ export default function ProjectAssignment({ resources = [], onAssignmentUpdate }
     setMessage("");
 
     try {
-      // Aquí va tu API call para actualizar la asignación
-      const res = await fetch(`http://localhost:4000/api/personal/${assignment.personalId}`, {
+      const res = await fetch(`https://recursos-api-cloud-gtaqgsf2hbfvgac5.australiaeast-01.azurewebsites.net/recursos/${assignment.personalId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ proyecto_asignado: assignment.proyecto })
+        body: JSON.stringify({ 
+          proyecto_asignado: assignment.proyecto  // ✅ CORREGIDO
+        })
       });
 
       if (res.ok) {
         setMessage("✅ Personal asignado correctamente");
         setAssignment({ personalId: "", proyecto: "" });
         
-        // Auto-limpiar mensaje
         setTimeout(() => {
           setMessage("");
         }, 5000);
         
         onAssignmentUpdate();
       } else {
-        throw new Error("Error en la asignación");
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Error en la asignación");
       }
     } catch (error) {
       console.error("Error al asignar:", error);
-      setMessage("❌ Error al asignar personal");
+      setMessage(`❌ Error: ${error.message}`);
       
-      // Auto-limpiar mensaje de error
       setTimeout(() => {
         setMessage("");
       }, 5000);

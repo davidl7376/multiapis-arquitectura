@@ -1,17 +1,23 @@
 import { useState } from "react";
 import "./ResourcesFilters.css";
 
-export default function ResourcesFilters() {
+export default function ResourcesFilters({ onFilterChange }) {
   const [filters, setFilters] = useState({
     search: "",
     estado: ""
   });
 
   const handleChange = (e) => {
-    setFilters({
+    const newFilters = {
       ...filters,
       [e.target.name]: e.target.value
-    });
+    };
+    setFilters(newFilters);
+    
+    // Pasar los filtros al componente padre
+    if (onFilterChange) {
+      onFilterChange(newFilters);
+    }
   };
 
   return (

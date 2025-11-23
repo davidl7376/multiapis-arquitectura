@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { recursosService } from "../../services/recursosService";
 import "./ResourcesTable.css";
 
-export default function ResourcesTable() {
-  const [resources, setResources] = useState([]);
+export default function ResourcesTable({ resources = [], onResourceUpdate }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -11,13 +10,33 @@ export default function ResourcesTable() {
     try {
       setLoading(true);
       const personalData = await recursosService.getPersonal();
-      setResources(personalData);
       setError(null);
     } catch (err) {
       setError("Error cargando el personal");
       console.error("Error:", err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id, nombre) => {
+    if (window.confirm(`¿Estás seguro de eliminar a "${nombre}"?`)) {
+      try {
+        // Necesitamos agregar el método eliminarPersonal al servicio
+        await fetch(`https://recursos-api-cloud-gtaqgsf2hbfvgac5.australiaeast-01.azurewebsites.net/recursos/${id}`, {
+          method: 'DELETE'
+        });
+        
+        alert('✅ Personal eliminado correctamente');
+        
+        // Recargar la lista
+        if (onResourceUpdate) {
+          onResourceUpdate();
+        }
+      } catch (err) {
+        console.error('Error eliminando personal:', err);
+        alert('❌ Error al eliminar el personal');
+      }
     }
   };
 
@@ -83,6 +102,7 @@ export default function ResourcesTable() {
               <th>Estado</th>
               <th>Proyecto Asignado</th>
               <th>Contacto</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -101,10 +121,18 @@ export default function ResourcesTable() {
                   <div>{resource.email || "N/A"}</div>
                   <div className="telefono">{resource.telefono || "N/A"}</div>
                 </td>
+                <td>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDelete(resource.id || resource._id, resource.nombre_completo)}
+                  >
+                    🗑️ Eliminar
+                  </button>
+                </td>
               </tr>
             )) : (
               <tr>
-                <td colSpan="6" className="no-data">
+                <td colSpan="7" className="no-data">
                   No hay personal registrado
                 </td>
               </tr>
