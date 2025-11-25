@@ -9,7 +9,7 @@ RUN npm run build
 # Etapa 2: servir con nginx
 FROM nginx:alpine
 
-# Copiar los archivos construidos
+# Copiar los archivos construidossss
 COPY --from=build /app/build /usr/share/nginx/html
 
 # Copiar configuración personalizada de nginx
