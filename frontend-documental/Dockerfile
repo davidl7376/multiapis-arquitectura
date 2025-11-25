@@ -12,7 +12,7 @@ FROM nginx:alpine
 # Copiar los archivos construidossss
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Copiar configuración personalizada de nginx
+# Copiar configuración personalizada de nginx hhh
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Crear archivo de configuración para Azure
