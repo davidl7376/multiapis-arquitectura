@@ -679,7 +679,7 @@ npm-debug.log
 ```
 
 ---
-## 🧱 4) Docker Compose (red y servicios)
+## 🧱 5) Docker Compose (red y servicios)
 
 ### `docker-compose.yml`
 ```yaml
@@ -752,7 +752,7 @@ volumes:
 
 ## 🔎 6) Endpoints para probar (Postman/Insomnia)
 
-### recursos API (http://localhost:4001)
+### recursos API (http://localhost:4002)
 - `GET /health` → estado del servicio
 - `GET /db/health` → estado de conexión a la base de datos
 - `GET /recursos` → lista completa de recursos (desde PostgreSQL)
@@ -761,7 +761,7 @@ volumes:
 - `PUT /recursos/:id` → actualiza un recurso existente (actualiza solo los campos enviados)
 - `DELETE /recursos/:id` → elimina un recurso por ID
 
-### Proyectos API (http://localhost:4002)
+### Proyectos API (http://localhost:4003)
 -`GET /health` → estado del servicio
 -`GET /db/health` → estado de conexión a la base de datos
 -`GET /proyectos` → lista completa de proyectos (desde PostgreSQL)
@@ -770,7 +770,7 @@ volumes:
 -`PUT /proyectos/:id` → actualiza un proyecto existente (actualiza solo los campos enviados)
 -`DELETE /proyectos/:id` → elimina un proyecto por ID
 
-### Proyectos API (http://localhost:4003)
+### Gestion Documental API (http://localhost:4001)
 -`GET /health` → estado del servicio
 -`GET /db/health` → estado de conexión a la base de datos
 -`GET /` → mensaje base y rutas disponibles
