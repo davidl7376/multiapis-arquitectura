@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS gestion_schema.documents (
     created_by VARCHAR(255)
 );
 
--- Recursos
+-- Recursossssss
 DROP TABLE IF EXISTS recursos_schema.recursos CASCADE;
 
 CREATE TABLE IF NOT EXISTS recursos_schema.recursos (
